@@ -41,7 +41,7 @@ void* receiver_task(void *param)
 	unsigned char *recvBuf = (unsigned char *)malloc(sizeof(char) * DATA_TRANSFER_SIZE);   // Buffer for receiving data
     int transferred_size = 0;   // Received data in bytes
     struct libusb_device_handle **dev_handle = (struct libusb_device_handle **)param;   /* Structure of
-		 the opened PL2701 device handle */
+		 the opened PL27A1 device handle */
 
     printf("Flush Endpoint IN FIFO first\n");
     return_code = libusb_bulk_transfer(
@@ -102,7 +102,7 @@ void* sender_task(void *param)
 	unsigned char *sendBuf = (unsigned char *)malloc(sizeof(char) * DATA_TRANSFER_SIZE);   // Buffer for sending data
     int transferred_size = 0;   // Sent data in bytes
     struct libusb_device_handle **dev_handle = (struct libusb_device_handle **)param;   /* Structure of
-		 the opened PL2701 device handle */
+		 the opened PL27A1 device handle */
 
     // Create the data pattern "sendBuf" to be sent to the receiver
     for (i = 0; i < DATA_TRANSFER_SIZE; i++) {
@@ -149,7 +149,7 @@ void* sender_task(void *param)
  */
 int main(int argc, char* argv[])
 {
-    bool found_PL2701_device = false;
+    bool found_PL27A1_device = false;
     int i = 0;   // Indexes for the loops
     libusb_device **devices;   // Structures representing all USB device detected on the system
     libusb_device *device;   // Structure representing one USB device detected on the system
@@ -202,11 +202,11 @@ int main(int argc, char* argv[])
             return return_code;
         }
 
-        // Find PL2701 USB device
-        if((PROLIFIC_VID == device_descriptor.idVendor) && (PL2701_PID == device_descriptor.idProduct)) {
-            found_PL2701_device = true;
+        // Find PL27A1 USB device
+        if((OURSTECH_VID == device_descriptor.idVendor) && (IZEC35_7301_PID == device_descriptor.idProduct)) {
+            found_PL27A1_device = true;
             DEBUG("(%s, %s(), L%d)\n", __FILE__, __FUNCTION__, __LINE__);
-            printf("Found PL2701 USB device!\n");
+            printf("Found PL27A1 USB device!\n");
 
             // Open a device and obtain a device handle
             return_code = libusb_open(device, &dev_handle);
@@ -234,9 +234,9 @@ int main(int argc, char* argv[])
         }
     }
 
-    // Check whether any PL2701 USB device was found
-    if(!found_PL2701_device) {
-        printf("No PL2701 USB device was found!\n");
+    // Check whether any PL27A1 USB device was found
+    if(!found_PL27A1_device) {
+        printf("No PL27A1 USB device was found!\n");
         return PL_ERROR_NO_DEVICE;
     }
 
@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
 		// Get device statuses from vendor command
 		return_code = VENDOR_SPECIFIC_REQ_GET_STATUS(dev_handle, (unsigned char *)&dev_status);   
 		if (return_code < DEVICE_STATUS_LEN) {
-			printf("Fail to get PL2701 USB device status!\n");
+			printf("Fail to get PL27A1 USB device status!\n");
 			return PL_ERROR_WRONG_STATUS;
 		}
 		printf("Local device status: %s, %s, %s\n", dev_status.localSuspend ? "Suspend" : "Active", 

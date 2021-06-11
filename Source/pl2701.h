@@ -19,7 +19,12 @@
 #endif
 
 #define PROLIFIC_VID                  0x067B   // Prolific Vender ID
+#define OURSTECH_VID                  0x0ea0  // Prolific Vender ID
+
 #define PL2701_PID                    0x2701   // Prolific Product ID
+#define PL27A1_PID                    0x27A1   // Prolific Product ID
+#define IZEC35_7301_PID               0x7301   // Prolific Product ID
+
 #define BULK_USB3_TIMEOUT               1000   // Bulk transfer Timeout in millisecond 
 #define SLEEP_TIME                       500   // Default sleep time in millisecond (Windows) or microsecond (MAC or Linux)
 
